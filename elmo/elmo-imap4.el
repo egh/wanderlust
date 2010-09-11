@@ -2408,7 +2408,8 @@ command list) or a list of msg ids."
                (elmo-imap4-search-generate-uid from-msgs)
                (elmo-imap4-search-generate folder condition from-msgs))
             (elmo-imap4-search-generate folder condition from-msgs))))
-    (elmo-imap4-search-perform session imap-search)))
+    (when imap-search
+      (elmo-imap4-search-perform session imap-search))))
 
 (luna-define-method elmo-folder-search :around ((folder elmo-imap4-folder)
 						condition &optional numbers)

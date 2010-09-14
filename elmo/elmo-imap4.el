@@ -2284,18 +2284,18 @@ search command."
             '(" ")
             (cdr search))))
 
-(defun elmo-imap4-search-perform (session search-or-msg-ids)
+(defun elmo-imap4-search-perform (session search-or-uids)
   "Perform a search in an IMAP session."
-  (if (numberp (car search-or-msg-ids))
-      search-or-msg-ids
+  (if (numberp (car search-or-uids))
+      search-or-uids
     (elmo-imap4-response-value
      (elmo-imap4-send-command-wait
       session
-      (elmo-imap4-search-build-full-command search-or-msg-ids))
+      (elmo-imap4-search-build-full-command search-or-uids))
      'search)))
 
 (defun elmo-imap4-search-generate-vector (folder filter from-msgs)
-  "Generate an IMAP search or a list of message ids from a search
+  "Generate an IMAP search or a list of UIDs from a search
 condition vector."
   (let ((search-key (elmo-filter-key filter))
 	(imap-search-keys '("bcc" "body" "cc" "from" "subject" "to"
@@ -2387,8 +2387,8 @@ condition vector."
   
 (defun elmo-imap4-search-generate (folder condition from-msgs)
   "Generate an IMAP search command if possible or a list of
-msgids for a given search condition. Returns either (charset imap
-command list) or a list of msg ids."
+UIDs for a given search condition. Returns either (charset imap
+command list) or a list of UIDs."
   (if (vectorp condition)
       (elmo-imap4-search-generate-vector folder condition from-msgs)
     (let ((a (elmo-imap4-search-generate folder (nth 1 condition)

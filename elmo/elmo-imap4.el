@@ -2285,7 +2285,14 @@ search command."
             (cdr search))))
 
 (defun elmo-imap4-search-perform (session search-or-uids)
-  "Perform a search in an IMAP session."
+  "Perform an IMAP search.
+
+SESSION is an imap session.
+
+SEARCH-OR-UIDS is either a list of UIDs or a list of the
+form (CHARSET IMAP-SEARCH-COMMAND ...) which is to be evaluated.
+
+Returns a list of UIDs."
   (if (numberp (car search-or-uids))
       search-or-uids
     (elmo-imap4-response-value
@@ -2295,8 +2302,6 @@ search command."
      'search)))
 
 (defun elmo-imap4-search-generate-vector (folder filter from-msgs)
-  "Generate an IMAP search or a list of UIDs from a search
-condition vector."
   (let ((search-key (elmo-filter-key filter))
 	(imap-search-keys '("bcc" "body" "cc" "from" "subject" "to"
 			    "larger" "smaller" "flag")))
@@ -2348,7 +2353,10 @@ condition vector."
            (elmo-filter-value filter) charset))))))))
 
 (defun elmo-imap4-search-mergeable? (a b)
-  "Return t if A and B are two mergeable IMAP searches."
+  "Return t if A and B are two mergeable IMAP searches.
+
+A is the result of a call to elmo-imap4-search-generate.
+B is the result of a call to elmo-imap4-search-generate."
   (let ((cara (car a))
         (carb (car b)))
     (and (not (numberp cara))
@@ -2358,27 +2366,49 @@ condition vector."
              (equal cara carb)))))
 
 (defun elmo-imap4-search-mergeable-charset (a b)
-  "Return the charset of two searches for merging."
+  "Return the charset of two searches for merging.
+
+A is the result of a call to elmo-imap4-search-generate.
+B is the result of a call to elmo-imap4-search-generate."
   (or (car a)
       (car b)))
 
 (defun elmo-imap4-search-generate-uid (msgs)
-  "Return a search for a set of msgs."
+  "Return a search for a set of msgs.
+
+A search is a list of the form (CHARSET IMAP-SEARCH-COMMAND ...)
+which is to be evaluated at a future time."
   (list nil 
         (concat "uid " 
                 (cdr (car
                       (elmo-imap4-make-number-set-list msgs))))))
   
-(defun elmo-imap4-search-generate-and (a b)
-  "AND two searches."
+(defun elmo-imap4-search-generate-and (session a b)
+  "Return a search that returns the intersection of A and B in SESSION.
+
+SESSION is an imap session.
+A is the result of a call to elmo-imap4-search-generate.
+B is the result of a call to elmo-imap4-search-generate.
+
+A search is either a list of UIDs or a list of the form (CHARSET
+IMAP-SEARCH-COMMAND ...) which is to be evaluated at a future
+time."
   (if (elmo-imap4-search-mergeable? a b)
       (append (list (elmo-imap4-search-mergeable-charset a b))
               (cdr a) '(" ") (cdr b))
     (elmo-list-filter (elmo-imap4-search-perform session a) 
                       (elmo-imap4-search-perform session b))))
 
-(defun elmo-imap4-search-generate-or (a b)
-  "OR two searches."
+(defun elmo-imap4-search-generate-or (session a b)
+  "Return a search that returns the union of A and B in SESSION.
+
+SESSION is an imap session.
+A is the result of a call to elmo-imap4-search-generate.
+B is the result of a call to elmo-imap4-search-generate.
+
+A search is either a list of UIDs or a list of the form (CHARSET
+IMAP-SEARCH-COMMAND ...) which is to be evaluated at a future
+time."
   (if (elmo-imap4-search-mergeable? a b)
       (append (list (elmo-imap4-search-mergeable-charset a b))
               '("OR " "(") (cdr a) '(")" " " "(") (cdr b) '(")"))
@@ -2386,9 +2416,16 @@ condition vector."
                             (elmo-imap4-search-perform session b)))))
   
 (defun elmo-imap4-search-generate (folder condition from-msgs)
-  "Generate an IMAP search command if possible or a list of
-UIDs for a given search condition. Returns either (charset imap
-command list) or a list of UIDs."
+  "Return search in FOLDER for CONDITON and FROM-MSGS.
+
+FOLDER is a elmo folder structure.
+CONDITION is a search condition.
+FROM-MSGS is a set of messages.  When nil, generate vector for all
+messages in FOLDER.
+
+A search is either a list of UIDs or a list of the form (CHARSET
+IMAP-SEARCH-COMMAND ...) which is to be evaluated at a future
+time."
   (if (vectorp condition)
       (elmo-imap4-search-generate-vector folder condition from-msgs)
     (let ((a (elmo-imap4-search-generate folder (nth 1 condition)

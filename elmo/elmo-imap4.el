@@ -2442,6 +2442,7 @@ time."
   (let* ((imap-search
           (if from-msgs
               (elmo-imap4-search-generate-and
+               session
                (elmo-imap4-search-generate-uid from-msgs)
                (elmo-imap4-search-generate folder condition from-msgs))
             (elmo-imap4-search-generate folder condition from-msgs))))

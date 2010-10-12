@@ -42,10 +42,10 @@ message and of the root of its thread (both surrounded by <...>)"
       (concat "/" filter "/" all-folders))))
   
 (defun wl-thread-root-folder (thread-root)
-  (let ((root-uid (substring thread-root 1 -1))
-        (filter (concat "message-id:\"" thread-root
-                        "\"|references:\"" thread-root
-                        "\"")))
+  (let* ((thread-root-no-brackets (substring thread-root 1 -1))
+         (filter (concat "message-id:\"" thread-root-no-brackets
+                         "\"|references:\"" thread-root-no-brackets
+                         "\"")))
     (wl-make-all-folder-filter filter)))
 
 (defun wl-summary-visit-conversation (&optional close)

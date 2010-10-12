@@ -2280,7 +2280,7 @@ search command."
   (let ((charset (car search)))
     (append '("uid search")
             (if (not (null charset))
-                (list " CHARSET" charset))
+                (list " CHARSET " charset))
             '(" ")
             (cdr search))))
 

@@ -2278,9 +2278,9 @@ If optional argument REMOVE is non-nil, remove FLAG."
   "Process charset at beginning of SEARCH and build a full IMAP
 search command."
   (let ((charset (car search)))
-    (append '("uid search ")
+    (append '("uid search")
             (if (not (null charset))
-                (list "CHARSET " charset))
+                (list " CHARSET" charset))
             '(" ")
             (cdr search))))
 
@@ -2434,9 +2434,9 @@ time."
                                           from-msgs)))
       (cond
        ((eq (car condition) 'and)
-        (elmo-imap4-search-generate-and a b))
+        (elmo-imap4-search-generate-and session a b))
        ((eq (car condition) 'or)
-        (elmo-imap4-search-generate-or a b))))))
+        (elmo-imap4-search-generate-or session a b))))))
 
 (defun elmo-imap4-search-internal (folder session condition from-msgs)
   (let* ((imap-search

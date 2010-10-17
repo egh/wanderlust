@@ -79,4 +79,13 @@ message and of the root of its thread (both surrounded by <...>)"
   (let ((filter (concat "message-id:\"" mid "\"")))
     (wl-summary-goto-folder-subr (wl-make-all-folder-filter filter) 'update nil nil t)))
 
+(defun wl-folder-virtual-all ()
+  "Goto virtual folder searching across all messages."
+  (interactive)
+  (wl-folder-goto-folder-subr
+   (wl-make-all-folder-filter 
+    (wl-read-search-condition wl-fldmgr-make-filter-default))))
+
 (define-key wl-summary-mode-map "X" 'wl-summary-visit-conversation)
+
+(define-key wl-folder-mode-map "A" 'wl-folder-virtual-all)

@@ -37,8 +37,14 @@ message and of the root of its thread (both surrounded by <...>)"
 (defun wl-make-all-folder-filter (filter)
   (let ((all-folders (wl-summary-get-all-folders)))
     (if (> (length all-folders) 1)
-        (concat "*" (mapconcat (lambda (folder)
-                                 (concat "/" filter "/" folder)) all-folders ","))
+        (let ((folders (mapcar (lambda (folder)
+                                 (concat "/" filter "/" folder)) all-folders)))
+          (concat "*" (mapconcat
+                       (lambda (folder)
+                         (concat "\""
+                                 (replace-regexp-in-string "\"" "\\\"" folder nil t)
+                                 "\""))
+                       folders ",")))
       (concat "/" filter "/" (car all-folders)))))
   
 (defun wl-thread-root-folder (thread-root)

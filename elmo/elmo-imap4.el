@@ -2320,8 +2320,10 @@ Returns a list of UIDs."
 	(mapcar '(lambda (x) (delete x numbers)) rest)
 	numbers))
      ((string= "flag" search-key)
-      (elmo-imap4-folder-list-flagged
-       folder (intern (elmo-filter-value filter))))
+      (list nil
+	    (if (eq (elmo-filter-type filter) 'unmatch) "not " "")
+	    (elmo-imap4-flag-to-imap-search-key
+	     (intern (elmo-filter-value filter)))))
      ((or (string= "since" search-key)
 	  (string= "before" search-key))
       (list
@@ -2378,11 +2380,11 @@ B is the result of a call to elmo-imap4-search-generate."
 
 A search is a list of the form (CHARSET IMAP-SEARCH-COMMAND ...)
 which is to be evaluated at a future time."
-  (list nil 
-        (concat "uid " 
+  (list nil
+        (concat "uid "
                 (cdr (car
                       (elmo-imap4-make-number-set-list msgs))))))
-  
+
 (defun elmo-imap4-search-generate-and (session a b)
   "Return a search that returns the intersection of A and B in SESSION.
 
@@ -2396,7 +2398,7 @@ time."
   (if (elmo-imap4-search-mergeable? a b)
       (append (list (elmo-imap4-search-mergeable-charset a b))
               (cdr a) '(" ") (cdr b))
-    (elmo-list-filter (elmo-imap4-search-perform session a) 
+    (elmo-list-filter (elmo-imap4-search-perform session a)
                       (elmo-imap4-search-perform session b))))
 
 (defun elmo-imap4-search-generate-or (session a b)
@@ -2414,7 +2416,7 @@ time."
               '("OR " "(") (cdr a) '(")" " " "(") (cdr b) '(")"))
     (elmo-uniq-list (append (elmo-imap4-search-perform session a)
                             (elmo-imap4-search-perform session b)))))
-  
+
 (defun elmo-imap4-search-generate (folder condition from-msgs)
   "Return search in FOLDER for CONDITON and FROM-MSGS.
 

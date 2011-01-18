@@ -121,11 +121,12 @@
 
 (luna-define-method elmo-folder-open-internal ((folder elmo-multi-folder))
   (dolist (fld (elmo-multi-folder-children-internal folder))
-    (elmo-folder-open-internal fld)))
+    (unless (elmo-folder-open-internal-p fld)
+      (elmo-folder-open-internal fld))))
 
 (luna-define-method elmo-folder-open-internal-p ((folder elmo-multi-folder))
-  (let (open)
-    (dolist (fld (elmo-multi-folder-children-internal folder))
+  (let ((open t))
+    (dolist (fld (elmo-multi-folder-children-internal folder) open)
       (setq open (and open (elmo-folder-open-internal-p fld))))))
 
 (luna-define-method elmo-folder-check ((folder elmo-multi-folder))

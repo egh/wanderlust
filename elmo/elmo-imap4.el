@@ -2322,8 +2322,8 @@ Returns a list of UIDs."
      ((string= "flag" search-key)
       (list nil
 	    (if (eq (elmo-filter-type filter) 'unmatch) "not " "")
-	    (elmo-imap4-flag-to-imap-search-key
-	     (intern (elmo-filter-value filter)))))
+            (elmo-imap4-flag-to-imap-search-key
+             (intern (elmo-filter-value filter)))))
      ((or (string= "since" search-key)
 	  (string= "before" search-key))
       (list
@@ -2417,7 +2417,7 @@ time."
     (elmo-uniq-list (append (elmo-imap4-search-perform session a)
                             (elmo-imap4-search-perform session b)))))
 
-(defun elmo-imap4-search-generate (folder condition from-msgs)
+(defun elmo-imap4-search-generate (folder session condition from-msgs)
   "Return search in FOLDER for CONDITON and FROM-MSGS.
 
 FOLDER is a elmo folder structure.
@@ -2430,9 +2430,9 @@ IMAP-SEARCH-COMMAND ...) which is to be evaluated at a future
 time."
   (if (vectorp condition)
       (elmo-imap4-search-generate-vector folder condition from-msgs)
-    (let ((a (elmo-imap4-search-generate folder (nth 1 condition)
+    (let ((a (elmo-imap4-search-generate folder session (nth 1 condition)
                                           from-msgs))
-          (b (elmo-imap4-search-generate folder (nth 2 condition)
+          (b (elmo-imap4-search-generate folder session (nth 2 condition)
                                           from-msgs)))
       (cond
        ((eq (car condition) 'and)
@@ -2446,8 +2446,8 @@ time."
               (elmo-imap4-search-generate-and
                session
                (elmo-imap4-search-generate-uid from-msgs)
-               (elmo-imap4-search-generate folder condition from-msgs))
-            (elmo-imap4-search-generate folder condition from-msgs))))
+               (elmo-imap4-search-generate folder session condition from-msgs))
+            (elmo-imap4-search-generate folder session condition from-msgs))))
     (when imap-search
       (elmo-imap4-search-perform session imap-search))))
 

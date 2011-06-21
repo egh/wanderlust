@@ -2,18 +2,12 @@
   "Alist of (regex . folder-name). Regex is matched against the current folder. First match is the name of folder containing all mail.")
 
 (defun wl-summary-get-all-folders ()
-  (if (not wl-summary-buffer-folder-name)
-      (mapcar 'cdr wl-all-folder-alist)
-    (if wl-all-folder-alist
-        (let ((rest (cdr wl-all-folder-alist))
-              (next (car wl-all-folder-alist))
-              (retval '()))
-          (while next
-            (if (string-match (car next) wl-summary-buffer-folder-name)
-                (setq retval (cons (cdr next) retval)))
-            (setq next (car rest)
-                  rest (cdr rest)))
-          retval))))
+  (if wl-all-folder-alist
+      (if (not wl-summary-buffer-folder-name)
+          (remove-duplicates (mapcar 'cdr wl-all-folder-alist))
+        (list (wl-get-assoc-list-value wl-all-folder-alist
+                                       wl-summary-buffer-folder-name)))
+    nil))
 
 (defvar wl-summary-prev-folder-name nil)
 (defvar wl-summary-prev-message-id nil)

@@ -89,67 +89,67 @@
 
 (defvar wl-folder-toolbar
   '([wl-folder-jump-to-current-entity
-     wl-folder-jump-to-current-entity t "Enter Current Folder"]
+     wl-folder-jump-to-current-entity t "Enter" "Enter Current Folder"]
     [wl-folder-next-entity
-     wl-folder-next-entity t "Next Folder"]
+     wl-folder-next-entity t "Next" "Next Folder"]
     [wl-folder-prev-entity
-     wl-folder-prev-entity t "Previous Folder"]
+     wl-folder-prev-entity t "Prev" "Previous Folder"]
     [wl-folder-check-current-entity
-     wl-folder-check-current-entity t "Check Current Folder"]
+     wl-folder-check-current-entity t "Check" "Check Current Folder"]
     [wl-folder-sync-current-entity
-     wl-folder-sync-current-entity t "Sync Current Folder"]
+     wl-folder-sync-current-entity t "Sync" "Sync Current Folder"]
     [wl-draft
-     wl-draft t "Write a New Message"]
+     wl-draft t "New" "Write a New Message"]
     [wl-folder-goto-draft-folder
-     wl-folder-goto-draft-folder t "Go to Draft Folder"]
+     wl-folder-goto-draft-folder t "Drafts" "Go to Draft Folder"]
     [wl-folder-empty-trash
-     wl-folder-empty-trash t "Empty Trash"]
+     wl-folder-empty-trash t "Empty" "Empty Trash"]
     [wl-exit
-     wl-exit t "Quit Wanderlust"]
+     wl-exit t "Exit" "Quit Wanderlust"]
     )
   "The Folder buffer toolbar.")
 
 (defvar wl-summary-toolbar
   '([wl-summary-read
-     wl-summary-read t "Read Messages"]
+     wl-summary-read t "Read" "Read Messages"]
     [wl-summary-next
-     wl-summary-next t "Next Message"]
+     wl-summary-next t "Next" "Next Message"]
     [wl-summary-prev
-     wl-summary-prev t "Previous Message"]
+     wl-summary-prev t "Prev" "Previous Message"]
     [wl-summary-jump-to-current-message
-     wl-summary-jump-to-current-message t "Jump to Current Message"]
+     wl-summary-jump-to-current-message t "Enter" "Jump to Current Message"]
     [wl-summary-sync-force-update
-     wl-summary-sync-force-update t "Sync Current Folder"]
+     wl-summary-sync-force-update t "Sync" "Sync Current Folder"]
     [wl-summary-dispose
-     wl-summary-dispose t "Dispose Current Message"]
+     wl-summary-dispose t "Dispose" "Dispose Current Message"]
     [wl-summary-set-flags
-     wl-summary-set-flags t "Set Flags"]
+     wl-summary-set-flags t "Flag" "Set Flags"]
     [wl-draft
-     wl-summary-write-current-folder t "Write for Current Folder"]
+     wl-summary-write-current-folder t "New" "Write for Current Folder"]
     [wl-summary-reply
-     wl-summary-reply t "Reply to Current Message" ]
+     wl-summary-reply t  "Reply" "Reply to Current Message"]
     [wl-summary-reply-with-citation
-     wl-summary-reply-with-citation t "Reply to Current Message with Citation"]
+     wl-summary-reply-with-citation t "+Cite" "Reply to Current Message with Citation"]
     [wl-summary-forward
-     wl-summary-forward t "Forward Current Message"]
+     wl-summary-forward t "Forward" "Forward Current Message"]
     [wl-summary-exit
-     wl-summary-exit t "Exit Current Summary"]
+     wl-summary-exit t "Exit" "Exit Current Summary"]
     )
   "The Summary buffer toolbar.")
 
 (defvar wl-message-toolbar
   '([wl-message-read
-     wl-message-read t "Read Contents"]
+     wl-message-read t "Read" "Read Contents"]
     [wl-message-next-content
-     wl-message-next-content t "Next Content"]
+     wl-message-next-content t "Next" "Next Content"]
     [wl-message-prev-content
-     wl-message-prev-content t "Previous Content"]
+     wl-message-prev-content t "Prev" "Previous Content"]
     [wl-message-quit
-     wl-message-quit t "Back to Summary"]
+     wl-message-quit t "Exit" "Back to Summary"]
     [wl-message-play-content
-     wl-message-play-content t "Play Content"]
+     wl-message-play-content t "Play" "Play Content"]
     [wl-message-extract-content
-     wl-message-extract-content t "Extract Content"]
+     wl-message-extract-content t "Extract" "Extract Content"]
     )
   "The Message buffer toolbar.")
 
@@ -161,15 +161,15 @@
 
 (defvar wl-draft-toolbar
   '([wl-draft-send-from-toolbar
-     wl-draft-send-from-toolbar t "Send Current Draft"]
+     wl-draft-send-from-toolbar t "Send" "Send Current Draft"]
     [wl-draft-yank-original
-     wl-draft-yank-original t "Yank Displaying Message"]
+     wl-draft-yank-original t "Yank" "Yank Displaying Message"]
     [wl-draft-insert-signature
-     wl-draft-insert-signature t "Insert Signature"]
+     wl-draft-insert-signature t "Sign" "Insert Signature"]
     [wl-draft-kill
-     wl-draft-kill t "Kill Current Draft"]
+     wl-draft-kill t "Delete" "Kill Current Draft"]
     [wl-draft-save-and-exit
-     wl-draft-save-and-exit t "Save Draft and Exit"]
+     wl-draft-save-and-exit t "Save" "Save Draft and Exit"]
     )
   "The Draft buffer toolbar.")
 
@@ -238,6 +238,7 @@
 	    def (nth n defs))
       (define-key keymap (vector 'tool-bar (aref def 1))
 	(list 'menu-item (aref def 3) (aref def 1)
+              :help (aref def 4)
 	      :enable (aref def 2)
 	      :image (symbol-value (aref def 0)))))))
 

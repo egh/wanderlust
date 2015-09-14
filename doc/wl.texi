@@ -119,6 +119,7 @@ This manual is for Wanderlust @value{VERSION}.
 * Expire and Archive::       Automatic expiration and archiving of messages
 * Scoring::                  Score of the messages
 * Address Book::             Management of Address Book
+* Fast Find::                Quickly find a message
 * Spam Filter::              Spam filtering
 * Advanced Issues::          Advanced Issues
 * Migration::                Switch from older version of Wanderlust
@@ -7096,8 +7097,71 @@ Delete entry.
 Edit entry.
 @end table
 
+@node Fast Find, Spam Filter, Address Book, Top
+@chapter Fast Find
+@cindex Fast Find
 
-@node Spam Filter, Advanced Issues, Address Book, Top
+@code{wl-fastfind} provides an interface to quickly search your mail
+archive. It can use either Gmail or IMAP search (@ref{Filter Folder})
+or a local indexer (@ref{Search Folder}).
+
+@code{wl-fastfind} provides the command
+@code{wl-fastfind-goto-search-folder}. You will prompted for a search
+and Wanderlust will immediate jump to the search results.
+
+@menu
+* Setup::                       Setup
+* Searching::                   Searching
+@end menu
+
+@node Setup
+@section Setup of @code{wl-fastfind}
+
+To setup, first add @code{(require 'wl-fastfind)} to your @file{~/.wl}
+file. You will also need configure the value of
+@code{wl-fastfind-method}. This can be either @code{elmo}, @code{gmail}
+or @code{imap} (symbols).
+
+@subsection Elmo
+
+If you use the @code{elmo} method, you should also configure
+@code{elmo-search-default-engine} to your preferred search engine.
+
+@subsection Gmail
+
+If you use the @code{gmail} method, you should also to configure
+@code{wl-fastfind-gmail-username}.
+
+@subsection IMAP
+
+If you use the @code{imap} (not @code{gmail}), you should configure
+@code{wl-fastfind-archive-folder}. This should be the complete folder
+name for the IMAP folder you want to search, e.g.
+@samp{%archive:me@@example.com}
+
+@node Searching
+@section Searching
+
+To search your mail archive, use the command
+@code{wl-fastfind-goto-search-folder}, which can be called using @kbd{'}
+in a Summary buffer or the Folder buffer. You will be prompted for a
+search string. When you hit return, Wanderlust will immediately jump to
+the search results.
+
+If you are using the @code{elmo} fastfind method, you will immediately
+be prompted for a search string. The syntax of the search will depend on
+the value of @code{elmo-search-default-engine}. Quotes will be escaped
+for you automatically and passed on to the search program.
+
+If you are using the @code{imap} method, you will be prompted for the
+usual interactive IMAP query builder.
+
+If you are using the @code{gmail} method, you will be prompted for a
+Gmail search query
+(@uref{https://support.google.com/mail/answer/7190?hl=en}). You may use
+any Gmail search operator as the query is handled by Gmail.
+
+@node Spam Filter, Advanced Issues, Fast Find, Top
 @chapter Spam Filter
 @cindex Spam Filter
 
